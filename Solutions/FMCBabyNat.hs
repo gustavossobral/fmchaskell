@@ -34,15 +34,19 @@ infixl 6 +
 
 -- Output: O means False, S O means True
 isZero :: Nat -> Nat
-isZero = undefined
+isZero O = S O -- 0 é 0
+isZero (S _)= O -- Qualquer sucessor é !0 
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
-pred = undefined
+pred O = O -- Predecessor de 0 é 0
+pred (S n) = n -- O predecessor do sucessor de n é n
 
 -- Output: O means False, S O means True
 even :: Nat -> Nat
-even = undefined
+even O = S O -- 0 é par
+even (S O) = O -- 1 não é par
+even (S (S n)) = even n -- Para qualquer número X par, X-2 também é par (O mesmo para X impar).
 
 odd :: Nat -> Nat
 odd = undefined
