@@ -49,14 +49,18 @@ even (S O) = O -- 1 não é par
 even (S (S n)) = even n -- Para qualquer número X par, X-2 também é par (O mesmo para X impar).
 
 odd :: Nat -> Nat
-odd = undefined
+odd O = O -- 0 não é impar
+odd (S O) = S O -- 1 é impar
+odd (S (S n)) = odd n -- Para qualquer número X ímpar, X-2 também é ímpar (O mesmo para X par).
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
 -- It behaves like subtraction, except that it returns 0
 -- when "normal" subtraction would return a negative number.
 monus :: Nat -> Nat -> Nat
-monus = undefined
+monus m O  = m
+monus O O = O
+monus (S m) (S n) = monus n m
 
 (-*) :: Nat -> Nat -> Nat
 (-*) = monus
