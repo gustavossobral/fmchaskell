@@ -67,19 +67,21 @@ monus (S m) (S n) = monus n m
 
 -- multiplication
 (*) :: Nat -> Nat -> Nat
-(*) = undefined
+(*) _ O = O 
+(*) m (S n) = m + (m * n)
 
 infixl 7 *
 
 -- exponentiation
 (^) :: Nat -> Nat -> Nat
-(^) = undefined
+(^) _ O = (S O)
+(^) m (S n) = m ^ n * m
 
 -- decide: infix? ? ^
 
 -- quotient
 (/) :: Nat -> Nat -> Nat
-(/) = undefined
+(/) _ O = undefined
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
