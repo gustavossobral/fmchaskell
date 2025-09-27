@@ -34,24 +34,24 @@ infixl 6 +
 
 -- Output: O means False, S O means True
 isZero :: Nat -> Nat
-isZero O = S O -- 0 é 0
-isZero (S _)= O -- Qualquer sucessor é !0 
+isZero O = S O
+isZero (S _)= O
 
 -- pred is the predecessor but we define zero's to be zero
 pred :: Nat -> Nat
-pred O = O -- Predecessor de 0 é 0
-pred (S n) = n -- O predecessor do sucessor de n é n
+pred O = O
+pred (S n) = n
 
 -- Output: O means False, S O means True
 even :: Nat -> Nat
-even O = S O -- 0 é par
-even (S O) = O -- 1 não é par
-even (S (S n)) = even n -- Para qualquer número X par, X-2 também é par (O mesmo para X impar).
+even O = S O
+even (S O) = O
+even (S (S n)) = even n
 
 odd :: Nat -> Nat
-odd O = O -- 0 não é impar
-odd (S O) = S O -- 1 é impar
-odd (S (S n)) = odd n -- Para qualquer número X ímpar, X-2 também é ímpar (O mesmo para X par).
+odd O = O
+odd (S O) = S O 
+odd (S (S n)) = odd n
 
 -- This is called the dotminus or monus operator
 -- (also: proper subtraction, arithmetic subtraction, ...).
@@ -82,34 +82,55 @@ infixl 7 *
 -- quotient
 (/) :: Nat -> Nat -> Nat
 (/) _ O = undefined
+(/) O _ = O
+(/) n (S m) =
+  case n -* m of
+    O -> O
+    _ -> S ((n -* S m) / S m)
+
 
 -- remainder
 (%) :: Nat -> Nat -> Nat
-(%) = undefined
+(%) n O = undefined
+(%) n m = n -* ((n / m) * m)
 
 -- divides
 -- just for a change, we start by defining the "symbolic" operator
 -- and then define `devides` as a synonym to it
 -- again, outputs: O means False, S O means True
 (|||) :: Nat -> Nat -> Nat
-(|||) = undefined
-
+(|||) O _ = undefined
+(|||) m n =
+  case n % m of
+    O -> S O
+    _ -> O
+    
 -- x `absDiff` y = |x - y|
 -- (Careful here: this - is the actual minus operator we know from the integers!)
 absDiff :: Nat -> Nat -> Nat
-absDiff = undefined
+absDiff n O = n
+absDiff O _ = O
+absDiff n m = (m -* n) + (n-*m)
 
 (|-|) :: Nat -> Nat -> Nat
 (|-|) = absDiff
 
 factorial :: Nat -> Nat
-factorial = undefined
+factorial (S n) = S n * factorial n
 
 -- signum of a number (-1, 0, or 1)
 sg :: Nat -> Nat
-sg = undefined
+sg O = O
+sg (S n) = S O
 
 -- lo b a is the floor of the logarithm base b of a
 lo :: Nat -> Nat -> Nat
-lo = undefined
+lo O _ = undefined
+lo _ O = undefined
+lo (S O) _ = undefined
+lo m n =
+  case n/m of
+    O -> O
+    p -> S (lo m p)
+
 
