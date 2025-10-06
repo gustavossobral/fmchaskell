@@ -58,36 +58,47 @@ write [u,v]     for our u `Cons` (v `Cons` Nil)
 -}
 
 head :: [a] -> a
-head = undefined
+head [] = undefined --Lista vazia não possui head
+head (x : _) = x
 
 tail :: [a] -> [a]
-tail = undefined
+tail [] = undefined --Lista vazia não possui tail
+tail (_ : xs) = xs
 
 null :: [a] -> Bool
-null = undefined
+null [] = True
+null (_ : _) = False
 
 length :: Integral i => [a] -> i
-length = undefined
+length [] = 0
+length (_ : xs) = length xs + 1
 
 sum :: Num a => [a] -> a
-sum = undefined
+sum [] = 0
+sum (x : xs) = sum xs + x
 
 product :: Num a => [a] -> a
-product = undefined
+product [] = 0
+product (x : xs) = product xs * x
 
 reverse :: [a] -> [a]
-reverse = undefined
+reverse []= []
+reverse (x : xs) = reverse xs ++ [x] 
 
+--concatenação
 (++) :: [a] -> [a] -> [a]
-(++) = undefined
+(++) [] xs = xs
+(++) (x : xs) ys = x : (xs ++ ys)
 
 -- right-associative for performance!
 -- (what?!)
 infixr 5 ++
 
 -- (snoc is cons written backwards)
+--adiciona um elemento ao final de uma lista
 snoc :: a -> [a] -> [a]
-snoc = undefined
+snoc x [] = [x]
+snoc y (x : xs) = x : snoc y xs
 
 (<:) :: [a] -> a -> [a]
 (<:) = flip snoc
@@ -102,18 +113,57 @@ xs +++ (y:ys) = (xs +++ [y]) +++ ys
 -- (hmm?!)
 infixl 5 +++
 
--- minimum :: Ord a => [a] -> a
--- maximum :: Ord a => [a] -> a
+minimum :: Ord a => [a] -> a
+minimum [] = undefined
+minimum [x] = x
+minimum (x : xs) = min x (minimum xs)
 
--- take
--- drop
+maximum :: Ord a => [a] -> a
+maximum [] = undefined
+maximum [x] = x
+maximum (x : xs) = max x (maximum xs)
 
--- takeWhile
--- dropWhile
+--retorna os primeiros n elementos de uma lista
+take :: Int -> [a] -> [a]
+take _ [] = []
+take 0 _ = []
+take n (x:xs) = x : take (n-1) xs
 
--- tails
--- init
--- inits
+--remove os primeiros n elementos de uma lista
+drop :: Int -> [a] -> [a]
+drop _ [] = []
+drop 0 xs = xs 
+drop n (x : xs) = drop (n - 1) xs
+
+--retorna o prefixo mais longo da lista os quais satisfazem certa condição
+takeWhile :: (a -> Bool) -> [a] -> [a]
+takeWhile _ [] = []
+takeWhile p (x : xs)
+    | p x       = x : takeWhile p xs
+    | otherwise = [] 
+
+--remove o prefixo mais longo da lista os quais satisfazem certa condição
+dropWhile :: (a -> Bool) -> [a] -> [a]
+dropWhile _ [] = []
+dropWhile p (x : xs)
+    | p x       = dropWhile p xs
+    | otherwise = x:xs
+
+--retorna uma lista de todas as tails possíveis da lista de entrada
+tails :: [a] -> [[a]]
+tails [] = [[]]
+tails (x : xs) = (x : xs) : tails xs
+
+--retorna a lista com o ultimo elemento removido
+init :: [a] -> [a]
+init [] = undefined
+init [x] = []
+init (x : xs) = x : init xs
+
+--retorna uma lista de todos os prefixos possiveis da lista de entrada
+inits :: [a] -> [[a]]
+inits [] = [[]]
+inits xs = xs : inits (init xs)
 
 -- subsequences
 
@@ -132,8 +182,17 @@ infixl 5 +++
 
 -- (!!)
 
--- filter
--- map
+--constroe uma nova lista com apenas os itens que satisfazem uma certa condição
+filter :: (a -> Bool) -> [a] -> [a] 
+filter _ [] = []
+filter f (x : xs)
+  | f x = x : filter f xs
+  | otherwise = filter f xs
+
+--aplica uma função de transformação a cada elemento de uma lista e retorna uma nova lista com os resultados dessas transformações
+map :: (a -> b) -> [a] -> [b]
+map _ [] = []
+map f (x : xs) = f x : map f xs
 
 -- cycle
 -- repeat
